@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="spring-crud" />
+        <module name="spring_crud-master" />
+        <module name="spring_crud" />
+        <module name="2.3.1. spring_crud" />
+        <module name="2.4.1 spring_crud_security" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>

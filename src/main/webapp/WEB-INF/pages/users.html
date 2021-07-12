@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All users</title>
+</head>
+<body>
+
+<h2> Show all users</h2>
+<div th:each="user : ${allUsers}">
+    <p>
+        <a th:href="@{/admin/{id}(id=${user.getId()})}"
+           th:text="${user.getId()} + ' ' + ${user.getName()} +  '; ' + |${user.getEmail()}|">user</a>
+    </p>
+
+</div>
+<hr>
+<p><a class="btn btn-lg btn-success" th:href="@{/admin/index}" role="button">Return in admin page</a></p>
+<hr>
+
+</body>
+</html>

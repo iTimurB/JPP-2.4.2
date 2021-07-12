@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin page</title>
+</head>
+<body>
+<h1>Admin page</h1>
+<hr>
+    <p> Yours name: <span th:text="${user.getName()}"></span></p>
+    <p> Yours role: <span th:text="${user.getRoles()}"></span></p>
+
+<hr>
+
+<p><a class="btn btn-lg btn-success" th:href="@{/admin/users}" role="button">Show all users</a></p>
+<p>
+    <a href="/admin/new">Create new user</a>
+</p>
+<hr>
+<p><a class="btn btn-lg btn-danger" th:href="@{/logout}" role="button">Exit</a></p>
+
+</body>
+</html>
