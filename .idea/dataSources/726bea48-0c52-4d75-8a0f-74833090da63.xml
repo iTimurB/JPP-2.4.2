@@ -1022,27 +1022,28 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <Position>1</Position>
       <DataType>bigint|0s</DataType>
       <NotNull>1</NotNull>
+      <SequenceIdentity>null</SequenceIdentity>
     </column>
     <column id="300" parent="294" name="name">
       <Position>2</Position>
-      <DataType>varchar(50)|0s</DataType>
+      <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
     <column id="301" parent="294" name="age">
       <Position>3</Position>
       <DataType>int|0s</DataType>
-      <NotNull>1</NotNull>
     </column>
     <column id="302" parent="294" name="email">
       <Position>4</Position>
       <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
     </column>
     <column id="303" parent="294" name="password">
       <Position>5</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="304" parent="294" name="email">
+    <index id="304" parent="294" name="users_email_uindex">
       <ColNames>email</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
@@ -1052,9 +1053,9 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="306" parent="294" name="email">
+    <key id="306" parent="294" name="users_email_uindex">
       <ColNames>email</ColNames>
-      <UnderlyingIndexName>email</UnderlyingIndexName>
+      <UnderlyingIndexName>users_email_uindex</UnderlyingIndexName>
     </key>
     <column id="307" parent="295" name="user_id">
       <Position>1</Position>

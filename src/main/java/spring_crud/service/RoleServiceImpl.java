@@ -7,6 +7,7 @@ import spring_crud.dao.RoleDao;
 import spring_crud.model.Role;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class RoleServiceImpl implements RoleService{
@@ -22,13 +23,19 @@ public class RoleServiceImpl implements RoleService{
 
     @Override
     @Transactional
+    public Role findRoleBiId(int id) {
+        return roleDao.findRoleBiId(id);
+    }
+
+    @Override
+    @Transactional
     public List<Role> getListRole() {
         return roleDao.getListRole();
     }
 
     @Override
-    @Transactional
-    public Role getROleById(int id) {
-        return roleDao.getROleById(id);
+    public Set<Role> getRoleSetById(int[] id) {
+        return null;
     }
+
 }

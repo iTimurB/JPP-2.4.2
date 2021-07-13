@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 //.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/").permitAll() // доступность всем
+                .antMatchers("/", "/home_page").permitAll() // доступность всем
                 .antMatchers("/authenticated/**").authenticated()
                 .antMatchers("/user/**").access("hasAnyRole('ROLE_USER')") // разрешаем входить на /user пользователям с ролью User
                 .antMatchers("/admin/**").access("hasAnyRole('ROLE_ADMIN')")
@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(successUserHandler) // подключаем наш SuccessHandler для перенеправления по ролям
                 .and()
                 .logout()
-                .logoutSuccessUrl("/authenticated");
+                .logoutSuccessUrl("/index.jsp");
     }
 
     @Bean
@@ -52,24 +52,3 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 }
-// http
-//         .authorizeRequests()
-//         .antMatchers("/", "/list").access("hasRole('USER') or hasRole('ADMIN') or hasRole('DBA')")
-//         .antMatchers("/newuser/**", "/delete-user-*").access("hasRole('ADMIN')")
-//         .antMatchers("/edit-user-*").access("hasRole('ADMIN') or hasRole('DBA')")
-//         .and()
-//         .formLogin()
-//         .loginPage("/login")
-//         .loginProcessingUrl("/login")
-//         .usernameParameter("ssoId")
-//         .passwordParameter("password")
-//         .and()
-//         .rememberMe()
-//         .rememberMeParameter("remember-me")
-//         .tokenRepository(tokenRepository)
-//         .tokenValiditySeconds(86400)
-//         .and()
-//         .csrf()
-//         .and()
-//         .exceptionHandling()
-//         .accessDeniedPage("/Access_Denied");

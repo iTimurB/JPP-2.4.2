@@ -31,13 +31,22 @@ public class AdminController {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
-    @GetMapping("/index")
+    @GetMapping("/admin_page")
     public String index(ModelMap modelMap, Principal principal){
         User userDetails = (userDetailsService.findUserName(principal.getName()));
         User user = new User(userDetails.getId(), userDetails.getName(), userDetails.getAge(), userDetails.getEmail(), userDetails.getRoles());
 
         modelMap.addAttribute("user", user);
-        return "index";
+        return "admin_page";
+    }
+
+    @GetMapping("/show")
+    public String show(ModelMap modelMap, Principal principal) {
+        User userDetails = (userDetailsService.findUserName(principal.getName()));
+        User user = new User(userDetails.getId(), userDetails.getName(), userDetails.getAge(), userDetails.getEmail(), userDetails.getRoles());
+
+        modelMap.addAttribute("user", user);
+        return "show_user_page";
     }
 
     @GetMapping("/users")
@@ -50,7 +59,7 @@ public class AdminController {
     @GetMapping("/{id}")
     public String showUserPage(@PathVariable("id") int id, ModelMap modelMap) {
         modelMap.addAttribute("user", userService.showUser(id));
-        return "admin";
+        return "show_user_page";
     }
 
     @GetMapping("/new")
@@ -63,7 +72,7 @@ public class AdminController {
     }
 
     @PostMapping("/new")
-    public String create(@ModelAttribute("addUser") @Valid User user, @RequestParam("role") String [] role) {
+    public String create(@ModelAttribute("addUser") @Valid User user, BindingResult bindingResult, @RequestParam("role") String [] role) {
         Set<Role> roleSet = new HashSet<>();
         for (String roles : role){
             Role currentRole = roleService.getRoleByName(roles);
@@ -71,6 +80,9 @@ public class AdminController {
         }
         user.setRoles(roleSet);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if(bindingResult.hasErrors()){
+            return "new";
+        }
         userService.save(user);
         return "redirect:/admin/users";
     }

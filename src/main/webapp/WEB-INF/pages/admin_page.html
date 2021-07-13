@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"/>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,9 +8,9 @@
 <body>
 <h1>Admin page</h1>
 <hr>
-    <p> Yours name: <span th:text="${user.getName()}"></span></p>
-    <p> Yours role: <span th:text="${user.getRoles()}"></span></p>
-
+<p> Your name: <span th:text="${user.getName()}"></span></p>
+<p> Your role: <span th:text="${user.getRoles()}"></span></p>
+<p><a class="btn btn-lg btn-success" th:href="@{/admin/show}" role="button">Show your page</a></p>
 <hr>
 
 <p><a class="btn btn-lg btn-success" th:href="@{/admin/users}" role="button">Show all users</a></p>
