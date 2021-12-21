@@ -1,7 +1,8 @@
 package spring_crud.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import spring_crud.model.User;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,48 +14,51 @@ public class UserDaoImpl implements UserDao {
     @PersistenceContext
     private EntityManager entityManager;
 
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    public void setbCryptPasswordEncoder(BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
+
     @Override
-    @Transactional
     public List<User> getAllUsers() {
         return entityManager.createQuery("select u from User u", User.class).getResultList();
     }
 
     @Override
-    @Transactional
     public void save(User user) {
+        String passBCrypt = bcryptPass(user.getPassword());
+        user.setPassword(passBCrypt);
         entityManager.persist(user);
-        entityManager.flush();
     }
 
     @Override
-    public User showUser(int id) {
+    public User showUserById(int id) {
         return entityManager.find(User.class, id);
     }
 
     @Override
-    @Transactional
-    public void update(int id, User updatedUser) {
-        User userTemp = entityManager.find(User.class, id);
-        userTemp.setName(updatedUser.getName());
-        userTemp.setAge(updatedUser.getAge());
-        userTemp.setEmail(updatedUser.getEmail());
-        userTemp.setPassword(updatedUser.getPassword());
+    public void update(long id, User updatedUser) {
+        String passBCrypt = bcryptPass(updatedUser.getPassword());
+        updatedUser.setPassword(passBCrypt);
+        entityManager.merge(updatedUser);
     }
 
     @Override
-    @Transactional
     public void delete(int id) {
-        entityManager.remove(showUser(id));
+        entityManager.remove(showUserById(id));
     }
 
     @Override
     public User getUserByName(String email) {
-        List<User> list = entityManager.createQuery("SELECT u FROM User u WHERE u.email=:email")
+        return entityManager.createQuery("SELECT u FROM User u join fetch u.roles WHERE u.email=:email", User.class)//с ролью
                 .setParameter("email", email)
-                .getResultList();
-        if (list.isEmpty()) {
-            return null;
-        }
-        return list.get(0);
+                .getSingleResult();
+    }
+
+    @Override
+    public String bcryptPass(String pass) {
+        return bCryptPasswordEncoder.encode(pass);
     }
 }

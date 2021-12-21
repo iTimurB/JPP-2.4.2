@@ -23,6 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.successUserHandler = successUserHandler;
     }
 
+    //Настройка AuthenticationManager
     @Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
         auth
@@ -33,7 +34,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                //.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/", "/home_page").permitAll() // доступность всем
                 .antMatchers("/authenticated/**").authenticated()
@@ -41,14 +41,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").access("hasAnyRole('ROLE_ADMIN')")
                 .and()
                 .formLogin()  // Spring сам подставит свою логин форму
-                .successHandler(successUserHandler) // подключаем наш SuccessHandler для перенеправления по ролям
+                .successHandler(successUserHandler) // подключаем наш SuccessHandler для перенаправления по ролям
                 .and()
                 .logout()
                 .logoutSuccessUrl("/index.jsp");
     }
 
     @Bean
-    public static PasswordEncoder passwordEncoder() {
+    public static BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

@@ -21,13 +21,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         this.userDao = userDao;
     }
 
-    public User findUserName(String username) {
+    public User findUserByName(String username) {
         return userDao.getUserByName(username);
     }
 
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        User user = findUserName(name);
+        User user = findUserByName(name);
         if (user == null) {
             throw new UsernameNotFoundException(String.format("User '%s' not found", name));
         }

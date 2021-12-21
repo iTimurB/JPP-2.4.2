@@ -1,20 +1,20 @@
 package spring_crud.config;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
-        import org.springframework.context.annotation.*;
-        import org.springframework.core.env.Environment;
-        import org.springframework.jdbc.datasource.DriverManagerDataSource;
-        import org.springframework.orm.jpa.JpaTransactionManager;
-        import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-        import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-        import org.springframework.transaction.annotation.EnableTransactionManagement;
-        import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-        import javax.sql.DataSource;
-        import java.util.Properties;
+import org.springframework.context.annotation.*;
+import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import javax.sql.DataSource;
+import java.util.Properties;
 
 @Configuration
 @PropertySource("classpath:db.properties")
-@EnableWebMvc
 @EnableTransactionManagement
 @ComponentScan("spring_crud")
 public class HibernateConfig {
@@ -26,9 +26,7 @@ public class HibernateConfig {
     }
 
     private HibernateJpaVendorAdapter vendorAdapter() {
-        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setShowSql(true);
-        return vendorAdapter;
+        return new HibernateJpaVendorAdapter();
     }
 
     @Bean
@@ -43,6 +41,7 @@ public class HibernateConfig {
         props.put("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
         props.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
         props.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
+        props.put("hibernate.enable_lazy_load_no_trans", env.getProperty("hibernate.enable_lazy_load_no_trans"));
 
         entityManagerFactoryBean.setJpaProperties(props);
         return entityManagerFactoryBean;

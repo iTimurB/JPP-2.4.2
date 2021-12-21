@@ -6,6 +6,7 @@ import spring_crud.model.Role;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -19,18 +20,14 @@ public class RoleDaoImpl implements RoleDao{
     @Override
     @Transactional
     public Role getRoleByName(String role) {
-        List<Role> roleList = entityManager.createQuery("SELECT r FROM Role r where r.role=:role")
+        return (Role) entityManager.createQuery("SELECT r FROM Role r where r.role=:role")
                 .setParameter("role", role)
-                .getResultList();
-        if (roleList.isEmpty()){
-            return null;
-        }
-        return roleList.get(0);
+                .getSingleResult();
     }
 
     @Override
     @Transactional
-    public Role findRoleBiId(int id) {
+    public Role findRoleBiId(long id) {
         return entityManager.find(Role.class, id);
     }
 
@@ -38,15 +35,5 @@ public class RoleDaoImpl implements RoleDao{
     @Transactional
     public List<Role> getListRole() {
         return entityManager.createQuery("select r from Role r", Role.class).getResultList();
-    }
-
-    @Override
-    @Transactional
-    public Set<Role> getRoleSetById(int [] id) {
-        Set<Role> roleIdSet = new HashSet<>();
-        for (int role :id){
-            roleIdSet.add(findRoleBiId(role));
-        }
-        return roleIdSet;
     }
 }

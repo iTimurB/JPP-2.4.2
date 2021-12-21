@@ -33,15 +33,16 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
 
-    @GetMapping("")
+    public UserController(UserDetailsServiceImpl userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
+    @GetMapping
     public String show(ModelMap modelMap, Principal principal) {
-        User userDetails = (userDetailsService.findUserName(principal.getName()));
-        User user = new User(userDetails.getId(), userDetails.getName(), userDetails.getAge(), userDetails.getEmail(), userDetails.getRoles());
-
-        modelMap.addAttribute("user", user);
+        User userDetails = (userDetailsService.findUserByName(principal.getName()));
+        modelMap.addAttribute("user", userDetails);
         return "show_user";
     }
 }

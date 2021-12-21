@@ -1,6 +1,5 @@
 package spring_crud.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -12,6 +11,7 @@ import spring_crud.model.User;
 import spring_crud.service.RoleService;
 import spring_crud.service.UserDetailsServiceImpl;
 import spring_crud.service.UserService;
+
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.HashSet;
@@ -22,31 +22,21 @@ import java.util.Set;
 @RequestMapping("/admin")
 public class AdminController {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private RoleService roleService;
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
+    private final RoleService roleService;
 
-    @GetMapping("/admin_page")
-    public String index(ModelMap modelMap, Principal principal){
-        User userDetails = (userDetailsService.findUserName(principal.getName()));
-        User user = new User(userDetails.getId(), userDetails.getName(), userDetails.getAge(), userDetails.getEmail(), userDetails.getRoles());
-
-        modelMap.addAttribute("user", user);
-        return "admin_page";
+    public AdminController(PasswordEncoder passwordEncoder, UserService userService, RoleService roleService, UserDetailsService userDetailsService) {
+        this.passwordEncoder = passwordEncoder;
+        this.userService = userService;
+        this.roleService = roleService;
     }
 
-    @GetMapping("/show")
-    public String show(ModelMap modelMap, Principal principal) {
-        User userDetails = (userDetailsService.findUserName(principal.getName()));
-        User user = new User(userDetails.getId(), userDetails.getName(), userDetails.getAge(), userDetails.getEmail(), userDetails.getRoles());
-
-        modelMap.addAttribute("user", user);
-        return "show_user_page";
+    @GetMapping("/admin_page")
+    public String adminPage(ModelMap modelMap, Principal principal) {
+        User userDetails = userService.getUserByName(principal.getName());
+        modelMap.addAttribute("user", userDetails);
+        return "admin_page";
     }
 
     @GetMapping("/users")
@@ -56,55 +46,61 @@ public class AdminController {
         return "users";
     }
 
-    @GetMapping("/{id}")
-    public String showUserPage(@PathVariable("id") int id, ModelMap modelMap) {
-        modelMap.addAttribute("user", userService.showUser(id));
+    @GetMapping("/user/{id}")
+    public String getUserById(@PathVariable("id") int id, ModelMap modelMap) {
+        modelMap.addAttribute("user", userService.showUserById(id));
         return "show_user_page";
     }
 
-    @GetMapping("/new")
-    public String addUser(@ModelAttribute("addUser") User user, ModelMap modelMap) {
-        List<Role> roles = roleService.getListRole();
-        User newUser = new User ();
-        modelMap.addAttribute("newUser", newUser);
-        modelMap.addAttribute("getRoles", roles);
+    @GetMapping("/user/new")
+    public String addUser(ModelMap modelMap) {
+        modelMap.addAttribute("newUser", new User());
+        modelMap.addAttribute("getRoles", roleService.getListRole());
         return "new";
     }
 
-    @PostMapping("/new")
-    public String create(@ModelAttribute("addUser") @Valid User user, BindingResult bindingResult, @RequestParam("role") String [] role) {
-        Set<Role> roleSet = new HashSet<>();
-        for (String roles : role){
-            Role currentRole = roleService.getRoleByName(roles);
-            roleSet.add(currentRole);
-        }
-        user.setRoles(roleSet);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        if(bindingResult.hasErrors()){
+    @PostMapping("/user/new")//исправить
+    public String createUser(@ModelAttribute("newUser") @Valid User user, BindingResult bindingResult, @RequestParam("role") String[] role) {
+        if (bindingResult.hasErrors()) {
             return "new";
         }
+        user.setRoles(editUserRoles(role));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.save(user);
         return "redirect:/admin/users";
     }
 
-    @GetMapping("/{id}/edit")
-    public String edit(@PathVariable("id") int id, ModelMap modelMap) {
-        modelMap.addAttribute("user", userService.showUser(id));
+    @GetMapping("/user/{id}/edit")
+    public String editUser(@PathVariable("id") int id, ModelMap modelMap) {
+        modelMap.addAttribute("user", userService.showUserById(id));
+        modelMap.addAttribute("roles", roleService.getListRole());
         return "edit";
     }
 
-    @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, @PathVariable("id") int id) {
-        if(bindingResult.hasErrors()){
+    @PatchMapping("/user/{id}")
+    public String updateUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, @RequestParam(value = "role") String[] role) {
+        if (bindingResult.hasErrors()) {
             return "/edit";
         }
-        userService.update(id, user);
+        user.setRoles(editUserRoles(role));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userService.update(user.getId(), user);
         return "redirect:/admin/users";
     }
 
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") int id) {
+    @DeleteMapping("/user/{id}")
+    public String deleteUser(@PathVariable("id") int id) {
         userService.delete(id);
         return "redirect:/admin/users";
     }
+
+    public Set<Role> editUserRoles(String[] role) {
+        Set<Role> roleSet = new HashSet<>();
+        for (String roles : role) {
+            Role currentRole = roleService.getRoleByName(roles);
+            roleSet.add(currentRole);
+        }
+        return roleSet;
+    }
+
 }

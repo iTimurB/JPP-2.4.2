@@ -1,9 +1,5 @@
 package spring_crud.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring_crud.dao.UserDao;
@@ -14,8 +10,11 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserDao userDao;
+    private final UserDao userDao;
+
+    public UserServiceImpl(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -24,27 +23,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional()
+    @Transactional
     public void save(User user) {
         userDao.save(user);
     }
 
     @Override
-    @Transactional()
-    public User showUser(int id) {
-        return userDao.showUser(id);
+    public User showUserById(int id) {
+        return userDao.showUserById(id);
     }
 
     @Override
-    @Transactional()
-    public void update(int id, User user) {
+    @Transactional
+    public void update(long id, User user) {
         userDao.update(id, user);
     }
 
     @Override
-    @Transactional()
+    @Transactional
     public void delete(int id) {
         userDao.delete(id);
+    }
+
+    @Override
+    public User getUserByName(String name) {
+        return userDao.getUserByName(name);
     }
 
 }

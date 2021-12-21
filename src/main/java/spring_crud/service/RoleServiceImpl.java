@@ -1,6 +1,5 @@
 package spring_crud.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring_crud.dao.RoleDao;
@@ -10,10 +9,13 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class RoleServiceImpl implements RoleService{
+public class RoleServiceImpl implements RoleService {
 
-    @Autowired
-    private RoleDao roleDao;
+    private final RoleDao roleDao;
+
+    public RoleServiceImpl(RoleDao roleDao) {
+        this.roleDao = roleDao;
+    }
 
     @Override
     @Transactional
@@ -32,10 +34,4 @@ public class RoleServiceImpl implements RoleService{
     public List<Role> getListRole() {
         return roleDao.getListRole();
     }
-
-    @Override
-    public Set<Role> getRoleSetById(int[] id) {
-        return null;
-    }
-
 }

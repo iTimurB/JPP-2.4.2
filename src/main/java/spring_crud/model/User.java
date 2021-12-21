@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -21,12 +21,13 @@ public class User implements UserDetails {
     @Column(name = "name")
     private String name;
 
-    @Min(value = 0, message = "Age not be 0")
+    @Min(value = 1, message = "Age not be 0")
+    @Max(value = 200, message = "Hello alien")
     @Column(name = "age")
     private int age;
 
     @NotEmpty(message = "Email not be empty")
-    @Email
+    @Email (message = "Incorrectly filled out form")
     @Column(name = "email", unique = true)
     private String email;
 
@@ -35,7 +36,7 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -140,6 +141,19 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return getId() == user.getId() && getAge() == user.getAge() && Objects.equals(getName(), user.getName()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getPassword(), user.getPassword()) && Objects.equals(getRoles(), user.getRoles());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 
     @Override
