@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show user</title>
+</head>
+<body>
+<h2>Show user</h2>
+<div class="tab-content">
+    <div class="tab-pane active" id="userTable" role="tabpanel">
+        <table border="3">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>AGE</th>
+                <th>EMAIL</th>
+                <th>ROLE</th>
+            </tr>
+            <tr>
+                <td th:text="${editUser.id}">ID</td>
+                <td th:text="${editUser.name}">Name</td>
+                <td th:text="${editUser.age}">Age</td>
+                <td th:text="${editUser.email}">Email</td>
+                <td th:text="${editUser.roles}">Email</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<p>
+    <a th:href="@{/admin/user/{id}/edit(id=${editUser.getId()})}">Edit</a>
+</p>
+<p>
+<form th:method="DELETE" th:action="@{/admin/user/{id}(id=${editUser.getId()})}">
+    <input type="submit" value="Delete"/>
+</form>
+</p>
+
+<hr>
+<p><a class="btn btn-lg btn-success" th:href="@{/admin/admin_page}" role="button">Return in admin page</a></p>
+<hr>
+</body>
+</html>
