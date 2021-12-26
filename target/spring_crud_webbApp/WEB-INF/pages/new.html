@@ -6,7 +6,7 @@
 </head>
 <body>
 <h2>Create new User</h2>
-<form th:method="POST" th:action="@{/admin/user/new}" th:object="${newUser}">
+<form th:method="POST" th:action="@{/admin/user}" th:object="${newUser}">
     <p>
         <label for="name">Name:</label>
         <input type="text" th:field="*{name}" id="name">
@@ -29,10 +29,10 @@
     </p>
 
     <div class="form-group">
-        <select multiple size="2" name="role" class="form-control">
+        <select multiple size="2" name="rolesFromCreateUser" class="form-control">
             <label class="control-label">User's Role:</label>
-            <option value="ROLE_ADMIN">ROLE_ADMIN</option>
-            <option selected="selected" value="ROLE_USER">ROLE_USER</option>
+            <option th:value="1" >ROLE_ADMIN</option>
+            <option selected="selected" th:value="2">ROLE_USER</option>
         </select>
     </div>
 

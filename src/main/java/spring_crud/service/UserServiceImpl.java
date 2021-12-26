@@ -29,25 +29,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User showUserById(int id) {
+    public User showUserById(long id) {
         return userDao.showUserById(id);
     }
 
     @Override
     @Transactional
     public void update(long id, User user) {
+        if (!user.getPassword().equals("")){
+            user.setPassword(user.getPassword());
+        }
         userDao.update(id, user);
     }
 
     @Override
     @Transactional
-    public void delete(int id) {
+    public void delete(long id) {
         userDao.delete(id);
     }
 
     @Override
-    public User getUserByName(String name) {
-        return userDao.getUserByName(name);
+    public User getUserByNameWithRoles(String name) {
+        return userDao.getUserByNameWithRoles(name);
     }
-
 }

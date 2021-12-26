@@ -1,6 +1,5 @@
 package spring_crud.service;
 
-import org.springframework.security.core.userdetails.UserDetailsService;
 import spring_crud.model.User;
 
 import java.util.List;
@@ -10,11 +9,11 @@ public interface UserService {
 
     void save(User user);
 
-    User showUserById(int id);
+    User showUserById(long id);
 
     void update(long id, User user);
 
-    void delete(int id);
+    void delete(long id);
 
-    User getUserByName(String name);
+    User getUserByNameWithRoles(String name);
 }

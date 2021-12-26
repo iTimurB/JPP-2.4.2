@@ -9,13 +9,13 @@ public interface UserDao {
 
     void save(User user);
 
-    User showUserById(int id);
+    User showUserById(long id);
 
     void update(long id, User user);
 
-    void delete(int id);
+    void delete(long id);
 
-    User getUserByName(String name);
+    User getUserByNameWithRoles(String name);
 
     String bcryptPass(String pass);
 }

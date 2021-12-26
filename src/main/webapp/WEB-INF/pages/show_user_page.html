@@ -18,21 +18,21 @@
                 <th>ROLE</th>
             </tr>
             <tr>
-                <td th:text="${user.id}">ID</td>
-                <td th:text="${user.name}">Name</td>
-                <td th:text="${user.age}">Age</td>
-                <td th:text="${user.email}">Email</td>
-                <td th:text="${user.roles}">Email</td>
+                <td th:text="${editUser.id}">ID</td>
+                <td th:text="${editUser.name}">Name</td>
+                <td th:text="${editUser.age}">Age</td>
+                <td th:text="${editUser.email}">Email</td>
+                <td th:text="${editUser.roles}">Email</td>
             </tr>
         </table>
     </div>
 </div>
 
 <p>
-    <a th:href="@{/admin/user/{id}/edit(id=${user.getId()})}">Edit</a>
+    <a th:href="@{/admin/user/{id}/edit(id=${editUser.getId()})}">Edit</a>
 </p>
 <p>
-<form th:method="DELETE" th:action="@{/admin/user/{id}(id=${user.getId()})}">
+<form th:method="DELETE" th:action="@{/admin/user/{id}(id=${editUser.getId()})}">
     <input type="submit" value="Delete"/>
 </form>
 </p>

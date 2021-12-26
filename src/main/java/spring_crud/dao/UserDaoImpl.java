@@ -1,7 +1,7 @@
 package spring_crud.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import spring_crud.model.User;
 import javax.persistence.EntityManager;
@@ -14,11 +14,11 @@ public class UserDaoImpl implements UserDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public void setbCryptPasswordEncoder(BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    public void setbCryptPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User showUserById(int id) {
+    public User showUserById(long id) {
         return entityManager.find(User.class, id);
     }
 
@@ -46,19 +46,19 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(long id) {
         entityManager.remove(showUserById(id));
     }
 
     @Override
-    public User getUserByName(String email) {
-        return entityManager.createQuery("SELECT u FROM User u join fetch u.roles WHERE u.email=:email", User.class)//с ролью
+    public User getUserByNameWithRoles(String email) {
+        return entityManager.createQuery("SELECT u FROM User u join fetch u.roles WHERE u.email=:email", User.class)
                 .setParameter("email", email)
                 .getSingleResult();
     }
 
     @Override
     public String bcryptPass(String pass) {
-        return bCryptPasswordEncoder.encode(pass);
+        return passwordEncoder.encode(pass);
     }
 }

@@ -15,14 +15,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private final UserDao userDao;
+    private final UserService userService;
 
-    public UserDetailsServiceImpl(UserDao userDao) {
-        this.userDao = userDao;
+    public UserDetailsServiceImpl(UserService userService) {
+        this.userService = userService;
     }
 
     public User findUserByName(String username) {
-        return userDao.getUserByName(username);
+        return userService.getUserByNameWithRoles(username);
     }
 
     @Override

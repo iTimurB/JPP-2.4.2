@@ -14,7 +14,7 @@ import java.util.Set;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @NotEmpty(message = "Name not be empty")
     @Size(min = 2, max = 30, message = "Name size - 2 and 30 characters")
@@ -64,7 +64,7 @@ public class User implements UserDetails {
     }
 
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -148,7 +148,7 @@ public class User implements UserDetails {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
         User user = (User) o;
-        return getId() == user.getId() && getAge() == user.getAge() && Objects.equals(getName(), user.getName()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getPassword(), user.getPassword()) && Objects.equals(getRoles(), user.getRoles());
+        return getId() == user.getId();
     }
 
     @Override

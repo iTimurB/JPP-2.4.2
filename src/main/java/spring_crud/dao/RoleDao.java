@@ -6,7 +6,5 @@ import java.util.List;
 import java.util.Set;
 
 public interface RoleDao {
-    Role getRoleByName (String name);
-    Role findRoleBiId(long id);
-    List<Role> getListRole ();
+    Set<Role> getRolesByIds (List <Long> ids);
 }
